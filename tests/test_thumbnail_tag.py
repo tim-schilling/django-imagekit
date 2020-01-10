@@ -14,6 +14,16 @@ def test_img_tag():
         assert_not_equal(attrs[k].strip(), '')
 
 
+def test_img_tag_anchor():
+    ttag = r"""{% thumbnail '100x100' img anchor='c' %}"""
+    clear_imagekit_cache()
+    attrs = get_html_attrs(ttag)
+    expected_attrs = set(['src', 'width', 'height'])
+    eq_(set(attrs.keys()), expected_attrs)
+    for k in expected_attrs:
+        assert_not_equal(attrs[k].strip(), '')
+
+
 def test_img_tag_attrs():
     ttag = r"""{% thumbnail '100x100' img -- alt="Hello" %}"""
     clear_imagekit_cache()
@@ -52,6 +62,13 @@ def test_html_attrs_assignment():
 
 def test_assignment_tag():
     ttag = r"""{% thumbnail '100x100' img as th %}{{ th.url }}"""
+    clear_imagekit_cache()
+    html = render_tag(ttag)
+    assert_not_equal(html, '')
+
+
+def test_assignment_tag_anchor():
+    ttag = r"""{% thumbnail '100x100' img anchor='c' as th %}{{ th.url }}"""
     clear_imagekit_cache()
     html = render_tag(ttag)
     assert_not_equal(html, '')
